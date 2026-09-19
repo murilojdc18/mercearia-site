@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Etiqueta from '../components/Etiqueta.astro';
+import { loja } from '../data/loja';
+import fachada from '../assets/fachada.jpg';
+
+const links = [
+  { href: loja.links.whatsInstagram, rotulo: 'Chamar no WhatsApp', externo: true, destaque: true },
+  { href: '/cardapio', rotulo: 'Cardápio completo', destaque: true },
+  { href: loja.links.whatsBolo, rotulo: 'Encomendar bolo', externo: true },
+  { href: loja.links.rota, rotulo: 'Como chegar', externo: true },
+  { href: loja.links.avaliar, rotulo: 'Avaliar no Google', externo: true },
+  { href: '/#historia', rotulo: 'Conhecer o João e a Renata' },
+];
+---
+<Base
+  titulo="Links da Mercearia Guimarães Rosa"
+  descricao="WhatsApp, cardápio, como chegar e avaliações da Mercearia Guimarães Rosa, no Jardim Tupã, Barueri."
+  semTopo
+>
+  <div class="pagina">
+    <div class="cabeca">
+      <div class="foto" transition:name="fachada">
+        <Image src={fachada} alt="Fachada da Mercearia Guimarães Rosa" widths={[240, 360]} sizes="120px" loading="eager" />
+      </div>
+      <Etiqueta tamanho={78} inclinacao={12} carimbo class="selo"><small>todo dia</small><b>7h</b></Etiqueta>
+    </div>
+    <h1>Mercearia<br>Guimarães Rosa</h1>
+    <p class="sub">{loja.endereco.bairro}, {loja.endereco.cidade}</p>
+    <p class="horas">{loja.resumoHorario.map((h) => <span>{h.dias}: {h.horas}</span>)}</p>
+
+    <nav class="lista" aria-label="Links">
+      {links.map((l) => (
+        <a class:list={['item', { 'item--destaque': l.destaque }]} href={l.href} {...(l.externo ? { target: '_blank', rel: 'noopener' } : {})}>{l.rotulo}</a>
+      ))}
+    </nav>
+
+    <p class="rodape">{loja.endereco.rua}, {loja.endereco.bairro}, {loja.endereco.cidade}</p>
+  </div>
+</Base>
+
+<style>
+  .pagina {
+    min-height: 100dvh;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 2.5rem 1.25rem 2rem;
+    background: var(--lona); color: #fff;
+  }
+  .cabeca { position: relative; margin-bottom: 1.2rem; }
+  .foto { width: 120px; height: 120px; border-radius: 26px; overflow: hidden; box-shadow: 0 14px 28px -12px rgb(0 0 0 / 0.45); }
+  .foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .cabeca :global(.selo) { position: absolute; right: -2.6rem; top: -1.4rem; }
+  h1 { font-size: 2.6rem; margin-bottom: 0.3rem; }
+  .sub { margin: 0; color: var(--lona-100); }
+  .horas { margin: 0.4rem 0 1.8rem; color: var(--lona-100); font-size: 0.95rem; }
+  .horas span { display: block; }
+  .lista { width: min(440px, 100%); display: grid; gap: 0.75rem; }
+  .item {
+    display: block; padding: 1rem 1.2rem;
+    background: #fff; color: var(--lona-escura);
+    font-family: var(--fonte-letreiro); font-weight: 700; font-size: 1.3rem; text-decoration: none;
+    border-radius: var(--canto-interno);
+    box-shadow: inset 0 -4px 0 rgb(20 90 43 / 0.18);
+    transition: transform 220ms var(--mola), background-color 200ms ease;
+  }
+  .item:hover { transform: translateY(-2px); }
+  .item:active { transform: translateY(1px) scale(0.98); }
+  .item--destaque { background: var(--etiqueta); color: var(--tinta); box-shadow: inset 0 -4px 0 rgb(150 110 0 / 0.35); }
+  .rodape { margin-top: auto; padding-top: 2.5rem; font-size: 0.85rem; color: var(--lona-100); }
+</style>

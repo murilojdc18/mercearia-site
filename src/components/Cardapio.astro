@@ -1,0 +1,158 @@
+---
+// Cardápio digital: usado em /cardapio (só confirmados) e em /cardapio/revisar (tudo).
+import { Image } from 'astro:assets';
+import ItemCardapio from './ItemCardapio.astro';
+import type { Grupo } from '../data/cardapio';
+import { capasIlustrativas } from '../data/cardapio';
+import { foto } from '../data/fotos';
+import { loja } from '../data/loja';
+import vitrine from '../assets/vitrine.jpg';
+
+interface Props { grupos: Grupo[]; revisao?: boolean }
+const { grupos, revisao = false } = Astro.props;
+const totalRevisar = grupos.reduce((n, g) => n + g.itens.filter((i) => i.status === 'revisar').length, 0);
+---
+<header class="cab">
+  <div class="cab__foto" transition:name="vitrine">
+    <Image src={vitrine} alt="Vitrine da Mercearia Guimarães Rosa com pães, salgados, bolos e doces" widths={[500, 900, 1400]} sizes="100vw" loading="eager" fetchpriority="high" />
+  </div>
+  <div class="container cab__texto">
+    <h1>Cardápio</h1>
+    <p>Padaria, salgados, bolos da Renata, hortifrúti, bebidas e tudo da mercearia, no Jardim Tupã, em Barueri. Quer saber se tem hoje? É só perguntar pelo WhatsApp.</p>
+    <a class="botao botao--whats" href={loja.links.whatsCardapio} target="_blank" rel="noopener">Perguntar pelo WhatsApp</a>
+  </div>
+</header>
+
+{revisao && (
+  <div class="container aviso-revisao">
+    <p><strong>Página de revisão.</strong> Não aparece no Google. Os {totalRevisar} itens em amarelo foram presumidos: confira com a loja e, no arquivo <code>src/data/cardapio.ts</code>, troque <code>revisar</code> por <code>confirmado</code> nos que existem e apague os que não existem.</p>
+  </div>
+)}
+
+<nav class="categorias" aria-label="Categorias do cardápio">
+  <div class="container categorias__lista">
+    {grupos.map((g) => (
+      <a href={`#${g.id}`} class="categoria">
+        <Image src={foto(g.capa)} alt="" widths={[80, 160]} sizes="40px" loading="lazy" />
+        <span>{g.titulo}</span>
+      </a>
+    ))}
+  </div>
+</nav>
+
+<div class="container corpo">
+  <div class="busca">
+    <label for="busca">Procurar no cardápio</label>
+    <input id="busca" type="search" placeholder="Ex.: bolo, pão, alho" autocomplete="off" data-busca-campo>
+    <p class="busca__vazio" data-busca-vazio hidden>Nada com esse nome no cardápio. Pergunte pelo WhatsApp: pode ser que tenha na loja.</p>
+  </div>
+
+  {grupos.map((g) => (
+    <section class:list={['grupo', { 'grupo--destaque': g.destaque }]} id={g.id} aria-labelledby={`t-${g.id}`} data-grupo>
+      <div class="grupo__cab">
+        <div class="grupo__capa">
+          <Image src={foto(g.capa)} alt="" widths={[200, 400]} sizes="120px" loading="lazy" />
+          {capasIlustrativas.has(g.capa) && <span>foto ilustrativa</span>}
+        </div>
+        <div>
+          <h2 id={`t-${g.id}`}>{g.titulo}</h2>
+          <p>{g.resumo}</p>
+        </div>
+      </div>
+      <ul class="itens">
+        {g.itens.map((item) => <ItemCardapio item={item} mostrarStatus={revisao} />)}
+      </ul>
+      {g.id === 'bolos' && (
+        <a class="botao botao--etiqueta grupo__encomenda" href={loja.links.whatsBolo} target="_blank" rel="noopener">Encomendar bolo para festa</a>
+      )}
+    </section>
+  ))}
+
+  <p class="rodape-cardapio">A disponibilidade muda ao longo do dia e da semana. Na dúvida, pergunte pelo WhatsApp antes de sair de casa. As fotos marcadas como ilustrativas são de banco de imagem e vão ser trocadas pelas da loja.</p>
+</div>
+
+<script>
+  // Busca que filtra enquanto digita. Sem JS, o cardápio inteiro continua visível.
+  function iniciarBusca() {
+    const campo = document.querySelector<HTMLInputElement>('[data-busca-campo]');
+    if (!campo) return;
+    const vazio = document.querySelector<HTMLElement>('[data-busca-vazio]');
+    const normalizar = (t: string) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+    campo.addEventListener('input', () => {
+      const termo = normalizar(campo.value);
+      let achados = 0;
+      document.querySelectorAll<HTMLElement>('[data-grupo]').forEach((grupo) => {
+        let noGrupo = 0;
+        grupo.querySelectorAll<HTMLElement>('[data-busca]').forEach((item) => {
+          const bate = !termo || normalizar(item.dataset.busca ?? '').includes(termo);
+          item.hidden = !bate;
+          if (bate) noGrupo++;
+        });
+        grupo.hidden = noGrupo === 0;
+        achados += noGrupo;
+      });
+      if (vazio) vazio.hidden = achados > 0;
+    });
+  }
+  document.addEventListener('astro:page-load', iniciarBusca);
+</script>
+
+<style>
+  .cab__foto { height: clamp(200px, 38vw, 380px); overflow: hidden; }
+  .cab__foto :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+  .cab__texto {
+    position: relative; margin-top: -3rem;
+    background: var(--papel); border-radius: var(--canto-foto) var(--canto-foto) 0 0;
+    padding: 1.6rem 1.25rem 1.2rem;
+  }
+  @media (min-width: 700px) { .cab__texto { width: min(760px, 100% - 2.5rem); padding: 2rem 2.2rem 1.4rem; } }
+  .cab h1 { font-size: clamp(3.2rem, 14vw, 5.4rem); font-stretch: 75%; font-weight: 800; color: var(--lona-800); margin-bottom: 0.2em; }
+  .cab p { font-size: var(--t-medio); line-height: 1.5; color: var(--tinta-2); }
+
+  .aviso-revisao { max-width: 760px; }
+  .aviso-revisao p { background: var(--etiqueta-clara); border: 2px dashed #c9a100; border-radius: 12px; padding: 1rem 1.2rem; max-width: none; }
+
+  .categorias {
+    position: sticky; top: 3.9rem; z-index: var(--z-abas);
+    background: rgb(255 255 255 / 0.95); backdrop-filter: blur(8px);
+    border-block: 1px solid var(--linha);
+  }
+  .categorias__lista { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.6rem 0; scrollbar-width: none; max-width: 760px; }
+  .categoria {
+    flex: none; display: inline-flex; align-items: center; gap: 0.5rem;
+    min-height: 2.9rem; padding: 0.3rem 0.9rem 0.3rem 0.3rem;
+    border-radius: 999px; background: var(--lona-50); color: var(--tinta);
+    text-decoration: none; font-weight: 650; font-size: 1rem; white-space: nowrap;
+    transition: background-color 200ms ease;
+  }
+  .categoria:hover { background: var(--lona-100); }
+  .categoria :global(img) { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+
+  .corpo { max-width: 760px; padding-bottom: 4rem; }
+  .busca { padding: 1.6rem 0 0.4rem; }
+  .busca label { display: block; font-weight: 650; margin-bottom: 0.4rem; }
+  .busca input {
+    width: 100%; min-height: 3.25rem; padding: 0.7rem 1rem;
+    font: inherit; font-size: var(--t-base); color: var(--tinta);
+    border: 2px solid var(--linha); border-radius: var(--canto-interno); background: #fff;
+    transition: border-color 200ms ease;
+  }
+  .busca input:focus { outline: none; border-color: var(--lona); box-shadow: 0 0 0 4px var(--lona-50); }
+  .busca__vazio { margin: 0.8rem 0 0; color: var(--tinta-2); }
+
+  .grupo { padding: 2.2rem 0 1rem; scroll-margin-top: 8.5rem; border-bottom: 2px dashed var(--linha); }
+  .grupo[hidden] { display: none; }
+  .grupo--destaque {
+    background: var(--kraft); border-radius: var(--canto-foto); border-bottom: 0;
+    padding: 1.8rem 1.2rem 1.4rem; margin: 1.6rem -0.25rem;
+  }
+  .grupo__cab { display: flex; gap: 1.1rem; align-items: center; margin-bottom: 0.6rem; }
+  .grupo__capa { position: relative; flex: none; width: 120px; height: 120px; border-radius: 18px; overflow: hidden; box-shadow: var(--sombra-kraft); }
+  .grupo__capa :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .grupo__capa span { position: absolute; left: 0; right: 0; bottom: 0; background: rgb(23 35 27 / 0.72); color: #fff; font-size: 0.68rem; font-weight: 600; text-align: center; padding: 0.2rem; }
+  .grupo__cab h2 { font-size: clamp(2rem, 7vw, 2.75rem); color: var(--lona-800); margin-bottom: 0.2rem; }
+  .grupo__cab p { margin: 0; color: var(--tinta-2); font-size: 1.05rem; line-height: 1.45; }
+  .itens { list-style: none; margin: 0; padding: 0; }
+  .grupo__encomenda { margin-top: 0.8rem; }
+  .rodape-cardapio { margin-top: 2rem; font-size: 1rem; color: var(--tinta-2); }
+</style>

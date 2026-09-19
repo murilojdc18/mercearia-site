@@ -1,0 +1,9 @@
+---
+// Página interna para a família conferir os itens presumidos. Não vai para o Google nem para o sitemap.
+import Base from '../../layouts/Base.astro';
+import Cardapio from '../../components/Cardapio.astro';
+import { cardapio } from '../../data/cardapio';
+---
+<Base titulo="Revisão do cardápio | Mercearia Guimarães Rosa" descricao="Página interna de revisão do cardápio." semIndice>
+  <Cardapio grupos={cardapio} revisao />
+</Base>

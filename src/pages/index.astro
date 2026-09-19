@@ -1,0 +1,317 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Etiqueta from '../components/Etiqueta.astro';
+import { loja, semana, feriados } from '../data/loja';
+import fachada from '../assets/fachada.jpg';
+import vitrine from '../assets/vitrine.jpg';
+import boloMorango from '../assets/bolo-morango.jpg';
+import boloLimao from '../assets/bolo-limao.jpg';
+import hortifruti from '../assets/hortifruti.jpg';
+import mercearia from '../assets/mercearia.jpg';
+import bebidas from '../assets/bebidas.jpg';
+import joaoRenata from '../assets/joao-e-renata.jpg';
+
+// Segunda primeiro, domingo por último: é como o cliente lê a semana
+const semanaExibicao = [...semana.slice(1), semana[0]];
+// Pré-carrega a mesma foto de capa que o navegador vai escolher, para ela pintar antes
+const largurasCapa = [480, 800, 900];
+const capaVariantes = await Promise.all(
+  largurasCapa.map((width) => getImage({ src: fachada, width, format: 'webp' })),
+);
+const capaSrcset = capaVariantes.map((v, i) => `${v.src} ${largurasCapa[i]}w`).join(', ');
+const capaSizes = '(min-width: 900px) 55vw, 100vw';
+
+const enderecoCopia = `${loja.endereco.rua}, ${loja.endereco.bairro}, ${loja.endereco.cidade} - ${loja.endereco.uf}`;
+---
+<Base
+  titulo="Mercearia e padaria no Jardim Tupã, Barueri | Mercearia Guimarães Rosa"
+  descricao="Mercearia de família na Rua Guimarães Rosa, 465, Jardim Tupã, Barueri. Pão quentinho, bolos caseiros da Renata, hortifrúti e itens do dia a dia. Aberta todos os dias."
+>
+  <link slot="head" rel="preload" as="image" imagesrcset={capaSrcset} imagesizes={capaSizes} fetchpriority="high">
+
+  <!-- Capa: a fachada de verdade e o nome na lona, como na rua -->
+  <section class="capa">
+    <div class="capa__foto parallax" transition:name="fachada">
+      <Image src={fachada} alt="Fachada da Mercearia Guimarães Rosa, com a lona verde e o número 465" widths={largurasCapa} sizes={capaSizes} format="webp" loading="eager" fetchpriority="high" />
+    </div>
+    <div class="container capa__texto">
+      <div class="capa__lona">
+        <h1>Mercearia Guimarães Rosa</h1>
+        <p>A mercearia de família do Jardim Tupã, em Barueri.</p>
+      </div>
+      <Etiqueta tamanho={128} inclinacao={9} carimbo class="capa__etiqueta">
+        <small>aberto todo dia</small><b>7h</b>
+      </Etiqueta>
+      <p class="capa__lead">Pão quentinho, bolo da Renata, hortifrúti escolhido pelo João e aquela coisa que faltou em casa. Tudo pertinho.</p>
+      <div class="capa__acoes">
+        <a class="botao botao--whats" href={loja.links.whats} target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3Z"/></svg>
+          Chamar no WhatsApp
+        </a>
+        <a class="link-seco" href="/cardapio">Ver o cardápio</a>
+        <a class="link-seco" href="#visite">Como chegar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quem cuida: o João e a Renata, cada um com o seu ofício -->
+  <section class="quem kraft" id="historia">
+    <div class="container">
+      <div class="quem__abertura">
+        <figure class="casal">
+          <Image src={joaoRenata} alt="João e Renata sorrindo, emoldurados por uma moldura branca entalhada" widths={[400, 700, 1000]} sizes="(min-width: 900px) 45vw, 100vw" />
+          <figcaption class="marcador">João e Renata</figcaption>
+        </figure>
+        <div>
+          <h2>Quem cuida da loja</h2>
+          <p class="quem__intro">A mercearia nasceu de duas vidas inteiras de balcão. O João e a Renata juntaram o que cada um sabe fazer e abriram as portas na Rua Guimarães Rosa.</p>
+        </div>
+      </div>
+
+      <article class="pessoa">
+        <div class="pessoa__foto parallax">
+          <Image src={hortifruti} alt="Caixas com banana, tomate, cebola, alho e limão na entrada da loja" widths={[400, 700]} sizes="(min-width: 760px) 40vw, 100vw" />
+        </div>
+        <div class="pessoa__texto">
+          <h3>João</h3>
+          <p>Trabalhou a vida inteira em mercado, com passagem pelo San e pelo Mercado Maginata. É ele quem escolhe o hortifrúti e corre atrás do melhor preço.</p>
+        </div>
+      </article>
+
+      <article class="pessoa pessoa--invertida">
+        <div class="pessoa__foto parallax">
+          <Image src={boloMorango} alt="Bolo de chocolate com morangos feito pela Renata" widths={[400, 700]} sizes="(min-width: 760px) 40vw, 100vw" />
+        </div>
+        <div class="pessoa__texto">
+          <h3>Renata</h3>
+          <p>Confeiteira há muitos anos, passou pela Sodiê, pelo Mercado Maginata e pelo Mercado Japão. Os bolos, doces e sobremesas da vitrine são dela.</p>
+          <a class="link-seco" href={loja.links.whatsBolo} target="_blank" rel="noopener">Encomendar um bolo</a>
+        </div>
+      </article>
+
+      <p class="quem__final marcador">A padaria é dos dois: pão quentinho e salgado na vitrine todo dia.</p>
+    </div>
+  </section>
+
+  <!-- O que tem: mosaico com a loja real, a vitrine em destaque -->
+  <section class="tem">
+    <div class="container">
+      <h2>Tem de tudo um pouco</h2>
+      <p class="tem__texto">Somos uma mercearia e padaria de bairro no Jardim Tupã, em Barueri. Aqui você encontra pão francês, salgados, bolos caseiros, hortifrúti, bebida gelada e o que precisar para a casa: da despensa à limpeza, e até fita isolante e conexão hidráulica.</p>
+      <div class="mosaico">
+        <figure class="mosaico__item mosaico__item--grande">
+          <Image src={vitrine} alt="Vitrine com pães, salgados, bolos e doces" widths={[500, 900, 1200]} sizes="(min-width: 760px) 60vw, 100vw" />
+          <figcaption>Padaria e salgados</figcaption>
+        </figure>
+        <figure class="mosaico__item">
+          <Image src={boloLimao} alt="Bolo de limão com cobertura branca e raspas de limão" widths={[400, 700]} sizes="(min-width: 760px) 30vw, 50vw" />
+          <figcaption>Bolos da Renata</figcaption>
+        </figure>
+        <figure class="mosaico__item">
+          <Image src={bebidas} alt="Geladeiras com refrigerantes, sucos e água" widths={[400, 700]} sizes="(min-width: 760px) 30vw, 50vw" />
+          <figcaption>Bebida gelada</figcaption>
+        </figure>
+        <figure class="mosaico__item mosaico__item--largo">
+          <Image src={mercearia} alt="Prateleiras com produtos de mercearia, limpeza e higiene" widths={[500, 900]} sizes="(min-width: 760px) 60vw, 100vw" />
+          <figcaption>Mercearia, limpeza e higiene</figcaption>
+        </figure>
+      </div>
+      <a class="botao botao--etiqueta" href="/cardapio">Ver o cardápio completo</a>
+    </div>
+  </section>
+
+  <!-- Como chegar: cartão com endereço, rota, horário da semana e mapa -->
+  <section class="visite kraft" id="visite">
+    <div class="container visite__grade">
+      <div class="cartao">
+        <h2>Como chegar</h2>
+        <address class="endereco">
+          <span class="endereco__rua">{loja.endereco.rua}</span>
+          {loja.endereco.bairro}, {loja.endereco.cidade}, {loja.endereco.uf}<br>
+          CEP {loja.endereco.cep}
+        </address>
+
+        <div class="rotas">
+          <a class="botao botao--whats" href={loja.links.rota} target="_blank" rel="noopener">Traçar rota no Google Maps</a>
+          <a class="botao botao--claro" href={loja.links.waze} target="_blank" rel="noopener">Abrir no Waze</a>
+          <button class="botao botao--claro" type="button" data-copiar={enderecoCopia}>Copiar endereço</button>
+        </div>
+        <p class="copiado" role="status" aria-live="polite" data-copiado></p>
+
+        <div class="horario">
+          <div class="horario__cab">
+            <h3>Horário</h3>
+            <span class="agora" data-agora hidden></span>
+          </div>
+          <table class="dias">
+            <caption class="sr">Horário de funcionamento</caption>
+            <tbody>
+              {semanaExibicao.map((d) => (
+                <tr data-dia={d.dia}>
+                  <th scope="row">{d.nome}</th>
+                  <td>{d.abre}h às {d.fecha}h</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="nota">Feriados: 7h às 14h.</p>
+        </div>
+
+        <p class="pagamento">Aceitamos {loja.pagamentos.slice(0, -1).join(', ')} e {loja.pagamentos.at(-1)}.</p>
+      </div>
+
+      <div class="mapa">
+        <iframe title="Mapa com a localização da Mercearia Guimarães Rosa" src={loja.links.mapaEmbed} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script is:inline define:vars={{ semana, feriados }}>
+  // "Aberto agora", destaque do dia e botão de copiar. Sem JS, a tabela continua completa.
+  function iniciarVisite() {
+    const partes = Object.fromEntries(
+      new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit',
+        weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+      }).formatToParts(new Date()).map((p) => [p.type, p.value]),
+    );
+    const dias = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    const hoje = dias[partes.weekday];
+    const agora = Number(partes.hour) + Number(partes.minute) / 60;
+    const data = `${partes.year}-${partes.month}-${partes.day}`;
+    const regra = feriados.find((f) => f.data === data) || semana.find((d) => d.dia === hoje);
+
+    document.querySelector(`tr[data-dia="${hoje}"]`)?.classList.add('hoje');
+    const selo = document.querySelector('[data-agora]');
+    if (selo && regra) {
+      const aberto = agora >= regra.abre && agora < regra.fecha;
+      selo.textContent = aberto ? `Aberto agora, até ${regra.fecha}h` : 'Fechado agora';
+      selo.classList.toggle('agora--fechado', !aberto);
+      selo.hidden = false;
+    }
+
+    const botao = document.querySelector('[data-copiar]');
+    const aviso = document.querySelector('[data-copiado]');
+    botao?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(botao.dataset.copiar);
+        aviso.textContent = 'Endereço copiado.';
+      } catch {
+        aviso.textContent = `Não deu para copiar. O endereço é ${botao.dataset.copiar}.`;
+      }
+    });
+  }
+  document.addEventListener('astro:page-load', iniciarVisite);
+</script>
+
+<style>
+  /* Capa */
+  .capa { display: grid; overflow-x: clip; }
+  .capa__foto { aspect-ratio: 4 / 3.4; background: var(--kraft); }
+  .capa__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
+  .capa__texto { position: relative; padding-bottom: 3.5rem; }
+  .capa__lona {
+    position: relative;
+    margin-top: -3.2rem;
+    background: var(--lona); color: #fff;
+    padding: 1.2rem 1.3rem 1.1rem;
+    border-radius: var(--canto-interno);
+    box-shadow: var(--sombra), inset 0 -5px 0 rgb(0 0 0 / 0.14);
+    max-width: 34rem;
+  }
+  .capa__lona h1 { font-size: clamp(3rem, 13vw, 5.4rem); font-stretch: 75%; font-weight: 800; line-height: 0.92; margin-bottom: 0.35rem; }
+  .capa__lona p { margin: 0; color: var(--lona-100); font-size: var(--t-base); }
+  .capa__texto :global(.capa__etiqueta) { position: absolute; right: 0.6rem; top: -8.4rem; z-index: 2; }
+  .capa__lead { font-size: var(--t-medio); line-height: 1.5; margin: 1.6rem 0 1.5rem; color: var(--tinta-2); }
+  .capa__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+
+  @media (min-width: 900px) {
+    .capa { grid-template-columns: 1fr 1fr; align-items: center; min-height: min(88dvh, 820px); }
+    .capa__foto { grid-column: 2; grid-row: 1; aspect-ratio: auto; height: 100%; border-radius: 0 0 0 var(--canto-foto); }
+    .capa__texto { grid-column: 1; grid-row: 1; width: auto; margin: 0; padding: 3rem 0 3rem max(1.25rem, calc((100vw - 1120px) / 2)); }
+    .capa__lona { margin-top: 0; margin-right: -6rem; z-index: 1; }
+    .capa__texto :global(.capa__etiqueta) { top: 1rem; right: -3rem; }
+  }
+
+  /* Quem cuida */
+  .quem { padding: 4.5rem 0 5rem; }
+  .quem__intro { font-size: var(--t-medio); line-height: 1.5; margin-bottom: 0; }
+  .quem__abertura { display: grid; gap: 2rem; margin-bottom: 3.5rem; }
+  .casal { margin: 0; position: relative; }
+  .casal img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--canto-foto); box-shadow: 0 22px 40px -24px rgb(80 55 20 / 0.7); }
+  .casal figcaption {
+    position: absolute; left: 1rem; bottom: -1rem; transform: rotate(-3deg);
+    background: var(--etiqueta); color: var(--marcador);
+    font-size: 1.6rem; line-height: 1.2; padding: 0.2rem 0.9rem; border-radius: 4px;
+    box-shadow: 0 8px 16px -10px rgb(90 70 0 / 0.6);
+  }
+  @media (min-width: 900px) {
+    .quem__abertura { grid-template-columns: 1fr 1fr; align-items: center; gap: 3.5rem; }
+  }
+  .pessoa { display: grid; gap: 1.2rem; margin-bottom: 2.8rem; }
+  .pessoa__foto { border-radius: var(--canto-foto); aspect-ratio: 4 / 3; box-shadow: var(--sombra-kraft); }
+  .pessoa__foto img { width: 100%; height: 100%; object-fit: cover; }
+  .pessoa h3 { font-size: clamp(2.4rem, 8vw, 3rem); color: var(--lona-800); }
+  .quem__final { font-size: 1.8rem; color: var(--marcador); line-height: 1.2; margin: 0; }
+  @media (min-width: 760px) {
+    .pessoa { grid-template-columns: 1.1fr 1fr; align-items: center; gap: 3rem; }
+    .pessoa--invertida .pessoa__foto { order: 2; }
+    .pessoa--invertida { margin-left: 4rem; }
+  }
+
+  /* Mosaico */
+  .tem { padding: 4.5rem 0 5rem; }
+  .tem__texto { font-size: var(--t-base); color: var(--tinta-2); }
+  .mosaico { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1.8rem 0 2rem; }
+  .mosaico__item { margin: 0; position: relative; border-radius: var(--canto-foto); overflow: hidden; }
+  .mosaico__item img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1; transition: transform 600ms var(--mola); }
+  .mosaico__item--grande, .mosaico__item--largo { grid-column: 1 / -1; }
+  .mosaico__item--grande img { aspect-ratio: 4 / 3; }
+  .mosaico__item--largo img { aspect-ratio: 16 / 9; object-position: 50% 30%; }
+  .mosaico figcaption {
+    position: absolute; left: 0.7rem; bottom: 0.7rem;
+    width: fit-content; max-width: calc(100% - 1.4rem);
+    background: rgb(255 255 255 / 0.95); color: var(--tinta);
+    font-weight: 650; font-size: var(--t-pequeno); line-height: 1.3;
+    padding: 0.4rem 0.75rem; border-radius: 6px;
+  }
+  @media (hover: hover) { .mosaico__item:hover img { transform: scale(1.04); } }
+  @media (min-width: 760px) {
+    .mosaico { grid-template-columns: 1.6fr 1fr 1fr; grid-template-rows: auto auto; }
+    .mosaico__item--grande { grid-column: 1; grid-row: 1 / span 2; }
+    .mosaico__item--grande img { aspect-ratio: auto; }
+    .mosaico__item--largo { grid-column: 2 / span 2; }
+  }
+
+  /* Como chegar */
+  .visite { padding: 4.5rem 0 5rem; }
+  .visite__grade { display: grid; gap: 1.5rem; }
+  .cartao { background: var(--papel); border-radius: var(--canto-foto); padding: 1.8rem 1.4rem; box-shadow: var(--sombra-kraft); }
+  .endereco { font-style: normal; font-size: var(--t-base); color: var(--tinta-2); line-height: 1.5; }
+  .endereco__rua { display: block; font-family: var(--fonte-letreiro); font-stretch: 85%; font-weight: 700; font-size: var(--t-grande); color: var(--tinta); line-height: 1.15; margin-bottom: 0.2rem; }
+  .rotas { display: grid; gap: 0.6rem; margin-top: 1.4rem; }
+  .copiado { min-height: 1.5em; margin: 0.4rem 0 0; font-size: var(--t-pequeno); color: var(--lona-700); font-weight: 600; }
+  .horario { margin-top: 1.2rem; border-top: 1px solid var(--linha); padding-top: 1.2rem; }
+  .horario__cab { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 0.4rem; }
+  .horario h3 { margin: 0; font-size: var(--t-grande); }
+  .agora { background: var(--lona-50); color: var(--lona-800); font-weight: 650; font-size: var(--t-pequeno); padding: 0.25rem 0.75rem; border-radius: 999px; }
+  .agora::before { content: ''; display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--lona-600); margin-right: 0.45rem; vertical-align: 0.05em; }
+  .agora.agora--fechado { background: #fbe9e7; color: #8f1c16; }
+  .agora.agora--fechado::before { background: var(--marcador); }
+  .dias { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .dias th, .dias td { padding: 0.55rem 0.5rem; border-bottom: 1px dashed var(--linha); text-align: left; font-weight: 500; }
+  .dias td { text-align: right; font-weight: 650; }
+  .dias tr.hoje { background: var(--etiqueta-clara); }
+  .dias tr.hoje th::after { content: ' (hoje)'; font-weight: 650; color: var(--lona-700); }
+  .nota, .pagamento { font-size: var(--t-pequeno); color: var(--tinta-2); margin: 0.8rem 0 0; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .mapa { border-radius: var(--canto-foto); overflow: hidden; box-shadow: var(--sombra-kraft); background: var(--kraft); min-height: 380px; }
+  .mapa iframe { display: block; width: 100%; height: 100%; min-height: 380px; border: 0; }
+  @media (min-width: 560px) { .rotas { grid-template-columns: 1fr 1fr; } .rotas .botao--whats { grid-column: 1 / -1; } }
+  @media (min-width: 900px) {
+    .visite__grade { grid-template-columns: 1fr 1.1fr; align-items: stretch; gap: 2rem; }
+    .cartao { padding: 2.4rem 2.2rem; }
+  }
+</style>

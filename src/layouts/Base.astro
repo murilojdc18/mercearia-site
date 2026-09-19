@@ -1,0 +1,148 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '@fontsource-variable/bricolage-grotesque/standard.css';
+import '@fontsource-variable/figtree/wght.css';
+import '@fontsource/caveat-brush/latin-400.css';
+import '../styles/global.css';
+import { loja } from '../data/loja';
+import { schemaLoja } from '../data/schema';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  semTopo?: boolean;
+  semIndice?: boolean;
+  schemaExtra?: object;
+}
+const { titulo, descricao, semTopo = false, semIndice = false, schemaExtra } = Astro.props;
+const site = Astro.site!;
+const caminho = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonico = new URL(Astro.url.pathname, site).href;
+const imagemSocial = new URL('/og.jpg', site).href;
+const schemas = [schemaLoja(site), ...(schemaExtra ? [schemaExtra] : [])];
+const menu = [
+  { href: '/', rotulo: 'Início' },
+  { href: '/cardapio', rotulo: 'Cardápio' },
+];
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{titulo}</title>
+  <meta name="description" content={descricao}>
+  {semIndice ? <meta name="robots" content="noindex, nofollow"> : <link rel="canonical" href={canonico}>}
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  <meta name="theme-color" content="#1e7b3c">
+  <meta name="geo.region" content="BR-SP">
+  <meta name="geo.placename" content="Barueri">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content={loja.nome}>
+  <meta property="og:url" content={canonico}>
+  <meta property="og:title" content={titulo}>
+  <meta property="og:description" content={descricao}>
+  <meta property="og:image" content={imagemSocial}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  {!semIndice && schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  <slot name="head" />
+  <ClientRouter />
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  {!semTopo && (
+    <header class="topo" transition:name="topo">
+      <div class="container topo__linha">
+        <a class="marca" href="/" aria-label={`${loja.nome}, página inicial`}>
+          <span class="marca__lona">Mercearia<br>Guimarães Rosa</span>
+        </a>
+        <nav aria-label="Principal">
+          <ul class="menu">
+            {menu.map((item) => (
+              <li>
+                <a href={item.href} aria-current={caminho === item.href ? 'page' : undefined}>{item.rotulo}</a>
+              </li>
+            ))}
+            <li>
+              <a class="menu__whats" href={loja.links.whats} target="_blank" rel="noopener">WhatsApp</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  )}
+
+  <main id="conteudo">
+    <slot />
+  </main>
+
+  {!semTopo && (
+    <footer class="rodape">
+      <div class="container rodape__grade">
+        <div>
+          <p class="rodape__nome">{loja.nome}</p>
+          <p>Mercearia e padaria de família em Barueri.</p>
+          <address>{loja.endereco.rua}, {loja.endereco.bairro}<br>{loja.endereco.cidade}, {loja.endereco.uf}, CEP {loja.endereco.cep}</address>
+        </div>
+        <div>
+          <p class="rodape__rotulo">Horário</p>
+          {loja.resumoHorario.map((h) => <p>{h.dias}: {h.horas}</p>)}
+        </div>
+        <div>
+          <p class="rodape__rotulo">Fale com a gente</p>
+          <p><a href={loja.links.whats} target="_blank" rel="noopener">WhatsApp {loja.telefoneExibicao}</a></p>
+          <p><a href={loja.links.instagram} target="_blank" rel="noopener">Instagram</a></p>
+          <p><a href="/creditos">Créditos das fotos</a></p>
+        </div>
+      </div>
+    </footer>
+  )}
+</body>
+</html>
+
+<style>
+  .topo {
+    position: sticky; top: 0; z-index: var(--z-topo);
+    background: rgb(255 255 255 / 0.92);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--linha);
+  }
+  .topo__linha { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.6rem 0; }
+  .marca { text-decoration: none; }
+  .marca__lona {
+    display: inline-block;
+    background: var(--lona); color: #fff;
+    font-family: var(--fonte-letreiro); font-stretch: 75%; font-weight: 800; font-size: 1.1rem; line-height: 0.95;
+    padding: 0.45rem 0.7rem 0.4rem; border-radius: 5px;
+    box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.15);
+  }
+  .menu { display: flex; align-items: center; gap: 1.2rem; list-style: none; margin: 0; padding: 0; }
+  .menu a {
+    display: inline-block; min-height: 2.75rem; line-height: 2.75rem;
+    color: var(--tinta); text-decoration: none; font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: border-color 200ms ease;
+  }
+  .menu a:hover { border-bottom-color: var(--linha); }
+  .menu a[aria-current='page'] { border-bottom-color: var(--etiqueta); }
+  .menu a.menu__whats {
+    color: #fff; background: var(--lona); padding: 0 0.9rem; border-radius: var(--canto-interno); border: 0;
+  }
+  @media (max-width: 480px) {
+    .menu li:first-child { display: none; }
+    .menu { gap: 0.9rem; }
+  }
+
+  .rodape { background: var(--lona-900); color: var(--lona-100); padding: 3rem 0 3.5rem; font-size: var(--t-pequeno); }
+  .rodape__grade { display: grid; gap: 1.6rem; }
+  .rodape p, .rodape address { margin: 0 0 0.35rem; font-style: normal; }
+  .rodape a { color: #fff; }
+  .rodape__nome { font-family: var(--fonte-letreiro); font-stretch: 78%; font-weight: 800; font-size: 1.75rem; color: #fff; line-height: 1.1; }
+  .rodape__rotulo { color: var(--etiqueta); font-weight: 650; }
+  @media (min-width: 760px) { .rodape__grade { grid-template-columns: 1.4fr 1fr 1fr; } }
+</style>

@@ -1,0 +1,132 @@
+/* Paleta tirada da própria loja: lona verde da fachada, etiqueta amarela,
+   marcador vermelho do preço e o pardo do saco de pão. */
+:root {
+  --lona-50: #eef6f0;
+  --lona-100: #e4f2e9;
+  --lona-600: #1e7b3c;
+  --lona-700: #186a33;
+  --lona-800: #145a2b;
+  --lona-900: #0e4120;
+  --lona: var(--lona-600);
+  --lona-escura: var(--lona-800);
+
+  --etiqueta: #ffcc1a;
+  --etiqueta-clara: #fff3c4;
+  --marcador: #c8241c;
+  --kraft: #e6d3b0;
+  --papel: #ffffff;
+  --tinta: #17231b;
+  --tinta-2: #46534a;
+  --linha: #e2dccf;
+
+  --fonte-letreiro: 'Bricolage Grotesque Variable', 'Arial Narrow', sans-serif;
+  --fonte-texto: 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fonte-marcador: 'Caveat Brush', 'Segoe Print', cursive;
+
+  /* Escala de tamanhos */
+  --t-pequeno: 1rem;
+  --t-base: 1.125rem;
+  --t-medio: 1.375rem;
+  --t-grande: 1.75rem;
+  --t-titulo: clamp(2.25rem, 7vw, 3.5rem);
+
+  --canto-foto: 18px;
+  --canto-interno: 10px;
+  --sombra: 0 14px 30px -16px rgb(20 90 43 / 0.45);
+  --sombra-kraft: 0 18px 34px -22px rgb(80 55 20 / 0.6);
+  --mola: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --z-topo: 20;
+  --z-abas: 10;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
+body {
+  margin: 0;
+  font-family: var(--fonte-texto);
+  font-size: var(--t-base);
+  line-height: 1.65;
+  color: var(--tinta);
+  background: var(--papel);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--lona-700); text-underline-offset: 0.18em; }
+
+h1, h2, h3 {
+  font-family: var(--fonte-letreiro);
+  font-stretch: 78%;
+  font-weight: 760;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.4em;
+  text-wrap: balance;
+}
+h2 { font-size: var(--t-titulo); }
+h3 { font-size: var(--t-grande); font-weight: 700; }
+p { margin: 0 0 1em; max-width: 62ch; text-wrap: pretty; }
+strong { font-weight: 650; }
+
+:focus-visible { outline: 3px solid var(--etiqueta); outline-offset: 3px; border-radius: 4px; }
+
+.pular {
+  position: absolute; left: 1rem; top: -4rem; z-index: 99;
+  background: var(--etiqueta); color: var(--tinta); padding: 0.6rem 1rem; font-weight: 600;
+}
+.pular:focus { top: 1rem; }
+
+.container { width: min(1120px, 100% - 2.5rem); margin-inline: auto; }
+
+/* Pardo de saco de pão com um grão leve, para não ficar chapado */
+.kraft {
+  background-color: var(--kraft);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .1 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Botões */
+.botao {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+  min-height: 3.25rem; padding: 0.8rem 1.4rem;
+  border-radius: var(--canto-interno);
+  font-family: var(--fonte-texto); font-weight: 650; font-size: var(--t-base);
+  text-decoration: none; border: 0; cursor: pointer;
+  transition: transform 220ms var(--mola), box-shadow 220ms ease, background-color 200ms ease;
+}
+.botao svg { width: 1.25em; height: 1.25em; flex: none; }
+.botao:hover { transform: translateY(-2px); }
+.botao:active { transform: translateY(1px) scale(0.98); }
+.botao--whats { background: var(--lona); color: #fff; box-shadow: var(--sombra); }
+.botao--whats:hover { background: var(--lona-800); }
+.botao--etiqueta { background: var(--etiqueta); color: var(--tinta); box-shadow: 0 10px 22px -14px rgb(120 90 0 / 0.7); }
+.botao--claro { background: #fff; color: var(--lona-800); box-shadow: inset 0 0 0 2px var(--lona-100); }
+.botao--claro:hover { box-shadow: inset 0 0 0 2px var(--lona-600); }
+
+.link-seco {
+  font-weight: 600; color: var(--tinta); text-decoration: underline;
+  text-decoration-color: var(--etiqueta); text-decoration-thickness: 3px;
+  transition: text-decoration-color 200ms ease;
+}
+.link-seco:hover { text-decoration-color: var(--lona); }
+
+.marcador { font-family: var(--fonte-marcador); font-weight: 400; letter-spacing: 0; }
+
+/* Fotos com um parallax leve, só onde o navegador suporta e o usuário não pediu menos movimento */
+.parallax { overflow: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .parallax img {
+      animation: parallax linear both;
+      animation-timeline: view();
+      scale: 1.12;
+    }
+    @keyframes parallax {
+      from { translate: 0 -5%; }
+      to { translate: 0 5%; }
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import Cardapio from '../components/Cardapio.astro';
+import { cardapioPublico } from '../data/cardapio';
+import { schemaCardapio } from '../data/schema';
+---
+<Base
+  titulo="Cardápio: pães, bolos caseiros e mercearia no Jardim Tupã, Barueri | Mercearia Guimarães Rosa"
+  descricao="Cardápio da Mercearia Guimarães Rosa: pão francês, salgados, bolos caseiros da Renata, hortifrúti, bebidas geladas e itens de mercearia, limpeza e higiene em Barueri."
+  schemaExtra={schemaCardapio(Astro.site!)}
+>
+  <Cardapio grupos={cardapioPublico} />
+</Base>

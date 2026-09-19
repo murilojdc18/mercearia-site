@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { creditos } from '../data/creditos-fotos';
+---
+<Base titulo="Créditos das fotos | Mercearia Guimarães Rosa" descricao="Créditos das fotos ilustrativas usadas no cardápio da Mercearia Guimarães Rosa.">
+  <section class="container creditos">
+    <h1>Créditos das fotos</h1>
+    <p>As fotos da fachada, da vitrine, dos bolos, do João e da Renata são da própria loja. As marcadas como "foto ilustrativa" no cardápio são da <a href="https://unsplash.com" rel="noopener">Unsplash</a>, usadas sob a <a href="https://unsplash.com/license" rel="noopener">licença Unsplash</a>, e vão ser trocadas por fotos da loja.</p>
+    <ul>
+      {Object.entries(creditos).map(([nome, c]) => (
+        <li><a href={c.pagina} rel="noopener">{nome.replace(/-/g, ' ')}</a>, por {c.autor}</li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .creditos { padding: 3.5rem 0 4.5rem; max-width: 760px; }
+  .creditos h1 { font-size: clamp(2.6rem, 10vw, 4rem); color: var(--lona-800); }
+  .creditos ul { padding-left: 1.2rem; }
+  .creditos li { margin-bottom: 0.4rem; text-transform: none; }
+</style>

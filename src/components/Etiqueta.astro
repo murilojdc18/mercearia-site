@@ -1,0 +1,63 @@
+---
+// Etiqueta amarela em estrela, igual às de papel da vitrine: a identidade visual do site.
+interface Props {
+  tamanho?: number;
+  inclinacao?: number;
+  carimbo?: boolean;
+  class?: string;
+}
+const { tamanho = 110, inclinacao = -8, carimbo = false, class: classe = '' } = Astro.props;
+
+// Estrela de 18 pontas com raio levemente irregular, como papel recortado à mão
+const pontas = 18;
+const pontos = Array.from({ length: pontas * 2 }, (_, i) => {
+  const angulo = (Math.PI * i) / pontas - Math.PI / 2;
+  const raio = i % 2 === 0 ? 50 - (i % 3) * 0.8 : 41.5 + (i % 4) * 0.5;
+  return `${(50 + raio * Math.cos(angulo)).toFixed(2)},${(50 + raio * Math.sin(angulo)).toFixed(2)}`;
+}).join(' ');
+---
+<span
+  class:list={['etiqueta', { 'etiqueta--carimbo': carimbo }, classe]}
+  style={`--tamanho:${tamanho}px; --inclinacao:${inclinacao}deg`}
+>
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <polygon points={pontos} />
+  </svg>
+  <span class="etiqueta__texto"><slot /></span>
+</span>
+
+<style>
+  .etiqueta {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: var(--tamanho);
+    aspect-ratio: 1;
+    transform: rotate(var(--inclinacao));
+    filter: drop-shadow(0 6px 10px rgb(90 70 0 / 0.28));
+  }
+  svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  polygon { fill: var(--etiqueta); stroke: var(--marcador); stroke-width: 1.4; stroke-linejoin: round; }
+  .etiqueta__texto {
+    position: relative;
+    font-family: var(--fonte-marcador);
+    color: var(--marcador);
+    text-align: center;
+    line-height: 0.95;
+    font-size: calc(var(--tamanho) * 0.22);
+    padding: 0 16%;
+  }
+  .etiqueta__texto :global(small) { display: block; font-size: 0.62em; margin-bottom: 0.15em; color: var(--tinta); }
+  .etiqueta__texto :global(b) { font-weight: 400; font-size: 1.5em; }
+
+  .etiqueta--carimbo {
+    animation: carimbo 700ms cubic-bezier(0.34, 1.56, 0.64, 1) 350ms both;
+  }
+  @keyframes carimbo {
+    from { opacity: 0; transform: scale(1.8) rotate(calc(var(--inclinacao) - 22deg)); }
+    to { opacity: 1; transform: scale(1) rotate(var(--inclinacao)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .etiqueta--carimbo { animation: none; }
+  }
+</style>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /cardapio/revisar
+
+Sitemap: https://mercearia-guimaraes-rosa.netlify.app/sitemap-index.xml
