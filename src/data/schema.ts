@@ -1,12 +1,13 @@
 // Dados estruturados (schema.org) para o Google entender a loja e o cardápio.
 import { loja, semana, feriados } from './loja';
 import { cardapioPublico } from './cardapio';
+import { absoluta } from './url';
 
 const nomesDia = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const hora = (h: number) => `${String(h).padStart(2, '0')}:00`;
 
 export function schemaLoja(site: URL) {
-  const url = site.href;
+  const url = absoluta('/', site);
   return {
     '@context': 'https://schema.org',
     '@type': ['GroceryStore', 'Bakery'],
@@ -14,8 +15,8 @@ export function schemaLoja(site: URL) {
     name: loja.nome,
     description: 'Mercearia e padaria de família no Jardim Tupã, em Barueri. Pão quentinho, bolos caseiros, hortifrúti e itens do dia a dia.',
     url,
-    image: new URL('/og.jpg', site).href,
-    logo: new URL('/favicon.svg', site).href,
+    image: absoluta('/og.jpg', site),
+    logo: absoluta('/favicon.svg', site),
     telephone: loja.telefoneSchema,
     address: {
       '@type': 'PostalAddress',
@@ -42,7 +43,7 @@ export function schemaLoja(site: URL) {
     })),
     paymentAccepted: 'Pix, Dinheiro, Cartão de débito, Cartão de crédito',
     currenciesAccepted: 'BRL',
-    hasMenu: new URL('/cardapio', site).href,
+    hasMenu: absoluta('/cardapio/', site),
     sameAs: [loja.links.instagram],
   };
 }
@@ -52,7 +53,7 @@ export function schemaCardapio(site: URL) {
     '@context': 'https://schema.org',
     '@type': 'Menu',
     name: `Cardápio da ${loja.nome}`,
-    url: new URL('/cardapio', site).href,
+    url: absoluta('/cardapio/', site),
     inLanguage: 'pt-BR',
     hasMenuSection: cardapioPublico.map((g) => ({
       '@type': 'MenuSection',

@@ -1,13 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import Etiqueta from '../components/Etiqueta.astro';
+import { rota } from '../data/url';
 ---
 <Base titulo="Página não encontrada, Mercearia Guimarães Rosa" descricao="Essa página não existe. Volte para o início ou veja o cardápio.">
   <section class="container nada">
     <Etiqueta tamanho={140} inclinacao={-10} carimbo><small>esgotou</small><b>404</b></Etiqueta>
     <h1>Essa página não está na prateleira</h1>
     <p>O endereço pode ter mudado. Volte para o início ou veja o cardápio.</p>
-    <p><a class="link-seco" href="/">Ir para o início</a> ou <a class="link-seco" href="/cardapio">ver o cardápio</a></p>
+    <p><a class="link-seco" href={rota("/")}>Ir para o início</a> ou <a class="link-seco" href={rota("/cardapio")}>ver o cardápio</a></p>
   </section>
 </Base>
 

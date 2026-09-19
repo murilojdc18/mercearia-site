@@ -3,15 +3,16 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Etiqueta from '../components/Etiqueta.astro';
 import { loja } from '../data/loja';
+import { rota } from '../data/url';
 import fachada from '../assets/fachada.jpg';
 
 const links = [
   { href: loja.links.whatsInstagram, rotulo: 'Chamar no WhatsApp', externo: true, destaque: true },
-  { href: '/cardapio', rotulo: 'Cardápio completo', destaque: true },
+  { href: rota('/cardapio'), rotulo: 'Cardápio completo', destaque: true },
   { href: loja.links.whatsBolo, rotulo: 'Encomendar bolo', externo: true },
   { href: loja.links.rota, rotulo: 'Como chegar', externo: true },
   { href: loja.links.avaliar, rotulo: 'Avaliar no Google', externo: true },
-  { href: '/#historia', rotulo: 'Conhecer o João e a Renata' },
+  { href: rota('/') + '#historia', rotulo: 'Conhecer o João e a Renata' },
 ];
 ---
 <Base

@@ -2,9 +2,11 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Trocar pelo endereço definitivo depois do primeiro deploy na Netlify
+// Publicado no GitHub Pages, numa subpasta. Com domínio próprio, `site` vira o
+// domínio e `base` vira '/'; o resto sai de `src/data/url.ts` e não precisa mudar.
 export default defineConfig({
-  site: 'https://mercearia-guimaraes-rosa.netlify.app',
+  site: 'https://murilojdc18.github.io',
+  base: '/mercearia-site/',
   build: {
     // CSS embutido no HTML: são poucos kB e evita duas idas à rede antes de pintar
     inlineStylesheets: 'always',

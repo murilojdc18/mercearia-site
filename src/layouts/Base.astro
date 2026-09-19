@@ -6,6 +6,7 @@ import '@fontsource/caveat-brush/latin-400.css';
 import '../styles/global.css';
 import { loja } from '../data/loja';
 import { schemaLoja } from '../data/schema';
+import { rota, absoluta, normalizar } from '../data/url';
 
 interface Props {
   titulo: string;
@@ -16,13 +17,13 @@ interface Props {
 }
 const { titulo, descricao, semTopo = false, semIndice = false, schemaExtra } = Astro.props;
 const site = Astro.site!;
-const caminho = Astro.url.pathname.replace(/\/$/, '') || '/';
+const caminho = normalizar(Astro.url.pathname);
 const canonico = new URL(Astro.url.pathname, site).href;
-const imagemSocial = new URL('/og.jpg', site).href;
+const imagemSocial = absoluta('/og.jpg', site);
 const schemas = [schemaLoja(site), ...(schemaExtra ? [schemaExtra] : [])];
 const menu = [
-  { href: '/', rotulo: 'Início' },
-  { href: '/cardapio', rotulo: 'Cardápio' },
+  { href: rota('/'), rotulo: 'Início' },
+  { href: rota('/cardapio'), rotulo: 'Cardápio' },
 ];
 ---
 <!doctype html>
@@ -33,8 +34,8 @@ const menu = [
   <title>{titulo}</title>
   <meta name="description" content={descricao}>
   {semIndice ? <meta name="robots" content="noindex, nofollow"> : <link rel="canonical" href={canonico}>}
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="sitemap" href="/sitemap-index.xml">
+  <link rel="icon" href={rota('/favicon.svg')} type="image/svg+xml">
+  <link rel="sitemap" href={rota('/sitemap-index.xml')}>
   <meta name="theme-color" content="#1e7b3c">
   <meta name="geo.region" content="BR-SP">
   <meta name="geo.placename" content="Barueri">
@@ -58,14 +59,14 @@ const menu = [
   {!semTopo && (
     <header class="topo" transition:name="topo">
       <div class="container topo__linha">
-        <a class="marca" href="/" aria-label={`${loja.nome}, página inicial`}>
+        <a class="marca" href={rota('/')} aria-label={`${loja.nome}, página inicial`}>
           <span class="marca__lona">Mercearia<br>Guimarães Rosa</span>
         </a>
         <nav aria-label="Principal">
           <ul class="menu">
             {menu.map((item) => (
               <li>
-                <a href={item.href} aria-current={caminho === item.href ? 'page' : undefined}>{item.rotulo}</a>
+                <a href={item.href} aria-current={caminho === normalizar(item.href) ? 'page' : undefined}>{item.rotulo}</a>
               </li>
             ))}
             <li>
@@ -97,7 +98,7 @@ const menu = [
           <p class="rodape__rotulo">Fale com a gente</p>
           <p><a href={loja.links.whats} target="_blank" rel="noopener">WhatsApp {loja.telefoneExibicao}</a></p>
           <p><a href={loja.links.instagram} target="_blank" rel="noopener">Instagram</a></p>
-          <p><a href="/creditos">Créditos das fotos</a></p>
+          <p><a href={rota('/creditos')}>Créditos das fotos</a></p>
         </div>
       </div>
     </footer>
