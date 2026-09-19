@@ -44,7 +44,9 @@ export function schemaLoja(site: URL) {
     paymentAccepted: 'Pix, Dinheiro, Cartão de débito, Cartão de crédito',
     currenciesAccepted: 'BRL',
     hasMenu: absoluta('/cardapio/', site),
-    sameAs: [loja.links.instagram],
+    // Instagram e o pino no Google Maps: ajuda o Google a ligar o site ao Perfil
+    // da Empresa, em vez de tratar os dois como negócios diferentes.
+    sameAs: [loja.links.instagram, loja.links.mapa],
   };
 }
 
