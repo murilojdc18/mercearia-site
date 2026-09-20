@@ -2,11 +2,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Publicado no GitHub Pages, numa subpasta. Com domínio próprio, `site` vira o
-// domínio e `base` vira '/'; o resto sai de `src/data/url.ts` e não precisa mudar.
+// Domínio próprio, servido pelo GitHub Pages. A base voltou a ser a raiz; o
+// helper de `src/data/url.ts` continua no caminho e absorveu a troca sozinho.
 export default defineConfig({
-  site: 'https://murilojdc18.github.io',
-  base: '/mercearia-site/',
+  site: 'https://merceariaguimaraesrosa.store',
   build: {
     // CSS embutido no HTML: são poucos kB e evita duas idas à rede antes de pintar
     inlineStylesheets: 'always',

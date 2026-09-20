@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /cardapio/revisar
 
-Sitemap: https://murilojdc18.github.io/mercearia-site/sitemap-index.xml
+Sitemap: https://merceariaguimaraesrosa.store/sitemap-index.xml
