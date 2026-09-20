@@ -6,7 +6,7 @@ sobra para ele.
 
 ## Onde paramos
 
-**O site está no ar** em https://murilojdc18.github.io/mercearia-site/, com
+**O site está no ar** em https://merceariaguimaraesrosa.store, com
 deploy automático a cada `git push`. O Perfil do Google tem categoria nova,
 site, link do cardápio, pagamentos e **três postagens publicadas**. O Search
 Console está verificado. Falta **cadastrar produtos** e **subir as fotos**.
@@ -33,8 +33,8 @@ gratuito exige). Não há segredo rastreado — conferido com `git ls-files`.
 |---|---|---|
 | Categoria principal | Padaria | **Supermercado** |
 | Categorias adicionais | Confeitaria | Confeitaria, Padaria, **Loja de Conveniência** |
-| Site | vazio | endereço do site |
-| Link do cardápio | vazio | `/cardapio/` |
+| Site | vazio | `merceariaguimaraesrosa.store` |
+| Link do cardápio | vazio | `/cardapio/` (ainda no endereço antigo, que redireciona) |
 | Pagamentos | crédito e débito | + "não aceita apenas dinheiro" |
 | Opções de serviço | vazio | "tem opção de compras na loja" |
 | Postagens | nenhuma | **3 publicadas** |
@@ -64,6 +64,7 @@ gratuito exige). Não há segredo rastreado — conferido com `git ls-files`.
 | Pendência | Trava o quê | Com quem |
 |---|---|---|
 | Cadastrar produtos no Perfil | Aparecer em busca por produto | Murilo (ver armadilha abaixo) |
+| Trocar o "Link do cardápio" no Perfil para o domínio novo | Coerência | Eu, quando a revisão do Site sair |
 | Subir as fotos tratadas | Perfil com cara de loja real | Murilo |
 | Apagar a foto 360 do muro "VENDE-SE" | Galeria | Murilo |
 | Anexar foto às 3 postagens publicadas | Alcance das postagens | Murilo |
@@ -72,7 +73,25 @@ gratuito exige). Não há segredo rastreado — conferido com `git ls-files`.
 | Natal e Ano Novo: abre? | Horário especial | Família |
 | "Empresa de empreendedoras": marcar? | Atributo | Família (é sobre titularidade) |
 | CEP nos Correios, coordenadas pelo pino | `loja.ts` | Murilo |
-| Domínio próprio (~R$ 40/ano) | Endereço decente | Murilo compra, eu configuro |
+
+## Domínio próprio, no mesmo dia
+
+`merceariaguimaraesrosa.store`, comprado na Hostinger. O endereço anterior
+trazia o nome de usuário do GitHub no meio, que nenhum cliente digitaria.
+
+- DNS na Hostinger: quatro registros `A` no `@` para os servidores do GitHub
+  (185.199.108–111.153) e um `CNAME` de `www` para `murilojdc18.github.io`.
+- `public/CNAME` é o que diz ao Pages qual domínio servir. **Sem ele, o Pages
+  volta para o endereço antigo no próximo deploy.**
+- A troca custou uma linha em `astro.config.mjs:8` porque todo caminho interno
+  já passava pelo helper de `src/data/url.ts`. Nenhuma página foi tocada.
+- **O endereço antigo redireciona 301** para o novo, assim como `www` e `http`.
+  Nada do que já foi compartilhado se perde.
+- HTTPS emitido e obrigatório.
+
+**Por que trocar hoje saiu barato:** o site tinha uma hora de vida, nada
+indexado. A verificação do Search Console era por meta tag, que sobrevive à
+troca de domínio — foi de propósito que escolhi meta tag em vez de arquivo.
 
 ## Armadilhas desta rodada
 
@@ -92,16 +111,30 @@ gratuito exige). Não há segredo rastreado — conferido com `git ls-files`.
   rastreador lê `murilojdc18.github.io/robots.txt`, que não é nosso. Quem
   protege `/cardapio/revisar` é a meta `noindex`, não o robots.
 - **O primeiro clique em vários botões do Perfil só dá foco**; o segundo abre.
+- **Domínio recém-comprado demora, e o Google cacheia o "não existe".** Depois
+  da compra, `8.8.8.8` continuou negando por mais de meia hora enquanto Quad9,
+  OpenDNS e Cloudflare já respondiam. Diagnóstico certo é perguntar ao servidor
+  autoritativo (`nslookup -type=A dominio atlas.dns-parking.com`) e ao RDAP
+  (`rdap.org/domain/...`), não ao resolvedor de sempre.
+- **A CDN do GitHub Pages cacheia o HTML por 10 minutos.** Depois de trocar o
+  token de verificação, o site serviu o valor antigo por uma rodada. Conferir
+  em laço antes de clicar em Verificar.
+- **Cada propriedade do Search Console tem seu próprio token.** O da
+  propriedade nova não é o mesmo da antiga.
+- **O campo "Link do cardápio" sumiu da aba Contato** depois que a edição do
+  Site entrou em revisão. O valor antigo continua lá e redireciona; refazer
+  quando a revisão sair.
 
 ## Como verificar que isto é verdade
 
 ```bash
 cd "C:/Users/Murilo/Documents/Projetos/mercearia-site"
 gh run list --limit 3                       # deploys verdes
-curl -sI https://murilojdc18.github.io/mercearia-site/ | head -1
-curl -s https://murilojdc18.github.io/mercearia-site/ | grep -o 'google-site-verification[^>]*'
+curl -sI https://merceariaguimaraesrosa.store/ | head -1
+curl -s https://merceariaguimaraesrosa.store/ | grep -o 'google-site-verification[^>]*'
+curl -sI https://murilojdc18.github.io/mercearia-site/ | grep -i location   # -> dominio novo
 grep -rn 'href="/' src/ | grep -v http      # zero: nada escapa da base
-curl -s https://murilojdc18.github.io/mercearia-site/cardapio/ | grep -c 'R\$'   # zero
+curl -s https://merceariaguimaraesrosa.store/cardapio/ | grep -c 'R\$'   # zero
 ```
 
 No Perfil: buscar "Mercearia Guimarães Rosa" logado e conferir que aparece
