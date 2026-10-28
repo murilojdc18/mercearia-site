@@ -23,7 +23,7 @@ Astro 7, site estático, publicado na Netlify.
 
 | O quê | Arquivo |
 |---|---|
-| Telefone, endereço, horário, feriados, links | `src/data/loja.ts` |
+| Endereço, horário, feriados, links | `src/data/loja.ts` |
 | Cardápio | `src/data/cardapio.ts` |
 | Créditos das fotos | `src/data/creditos-fotos.ts` |
 | Fotos | `src/assets/` (a do cardápio em `src/assets/cardapio/`) |
