@@ -32,11 +32,11 @@ Uma por semana basta — o que pesa é ter movimento, não volume.
 > baguete recheada na vitrine.
 > Rua Guimarães Rosa, 465 — Jardim Tupã.
 
-## 2. Os bolos da Renata — PUBLICADA em 19/09/2026
+## 2. Os bolos da Renata — PUBLICADA em 19/09/2026, número tirado em 27/10/2026
 
 > A Renata é confeiteira e faz os bolos aqui mesmo: chocolate com morango,
-> limão, laranja e o bolo caseiro de todo dia. Encomenda pelo WhatsApp
-> (11) 97208-0503, com um tempinho de antecedência.
+> limão, laranja e o bolo caseiro de todo dia. Tem também sonho e rosquinha
+> de chocolate. Encomenda pelo Instagram, com um tempinho de antecedência.
 
 ## 3. Hortifrúti escolhido a dedo — PUBLICADA em 19/09/2026
 
@@ -65,7 +65,7 @@ Uma por semana basta — o que pesa é ter movimento, não volume.
 abrir e em que horário*):
 
 > Chegou o panetone. E se for fazer a ceia, a Renata aceita encomenda de bolo
-> até [data] pelo WhatsApp (11) 97208-0503.
+> até [data] pelo Instagram.
 
 **Páscoa, festa junina, Dia das Mães**: mesma receita — o que a loja realmente
-vai ter, sem preço, com o WhatsApp no fim.
+vai ter, sem preço, com o Instagram no fim. Nunca o telefone: atraía ligação de spam.

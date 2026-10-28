@@ -15,7 +15,7 @@ escolher a categoria**. O site existe, passa no build e **não foi publicado**.
 |---|---|
 | Endereço | Rua Guimarães Rosa, 465, Jardim Tupã, Barueri, SP |
 | CEP | 06435-000 (informado pela família; OpenStreetMap dá 06435-350 para o trecho) |
-| Telefone e WhatsApp | (11) 97208-0503, do João |
+| Telefone e WhatsApp | removidos do perfil e do site em 27/10/2026 (ligações de spam) |
 | Horário | Seg a sáb 7h–20h; domingo e feriados 7h–14h |
 | Pagamentos | Pix, dinheiro, débito, crédito |
 | Instagram | @mercearia_guimaraesrosa1 |
