@@ -2,11 +2,9 @@
 import { Image } from 'astro:assets';
 import type { Item } from '../data/cardapio';
 import { foto } from '../data/fotos';
-import { whats } from '../data/loja';
 
 interface Props { item: Item; mostrarStatus?: boolean }
 const { item, mostrarStatus = false } = Astro.props;
-const pedido = whats(`Olá! Tem ${item.nome.toLowerCase()} hoje?`);
 const busca = [item.nome, item.descricao ?? ''].join(' ').toLowerCase();
 ---
 <li class:list={['item', { 'item--revisar': mostrarStatus && item.status === 'revisar' }]} data-busca={busca}>
@@ -23,7 +21,6 @@ const busca = [item.nome, item.descricao ?? ''].join(' ').toLowerCase();
     </h3>
     {item.descricao && <p class="item__descricao">{item.descricao}</p>}
     {mostrarStatus && item.status === 'revisar' && <p class="item__status">A revisar: a loja tem esse item?</p>}
-    <a class="item__pedir" href={pedido} target="_blank" rel="noopener">Perguntar no WhatsApp</a>
   </div>
 </li>
 
@@ -50,9 +47,4 @@ const busca = [item.nome, item.descricao ?? ''].join(' ').toLowerCase();
   .item__descricao { margin: 0 0 0.35rem; font-size: 1rem; color: var(--tinta-2); line-height: 1.5; }
   .item__status { margin: 0 0 0.35rem; font-size: 0.95rem; font-weight: 650; color: #7a5a00; }
   .item--revisar { background: var(--etiqueta-clara); padding-inline: 0.75rem; border-radius: 12px; border-bottom-color: transparent; margin-bottom: 0.4rem; }
-  .item__pedir {
-    display: inline-flex; align-items: center; min-height: 2.75rem;
-    font-size: 1rem; font-weight: 650; color: var(--lona-700);
-    text-decoration: underline; text-decoration-color: var(--etiqueta); text-decoration-thickness: 3px; text-underline-offset: 0.2em;
-  }
 </style>

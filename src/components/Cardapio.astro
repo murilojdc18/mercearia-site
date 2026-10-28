@@ -18,8 +18,8 @@ const totalRevisar = grupos.reduce((n, g) => n + g.itens.filter((i) => i.status 
   </div>
   <div class="container cab__texto">
     <h1>Cardápio</h1>
-    <p>Padaria, salgados, bolos da Renata, hortifrúti, bebidas e tudo da mercearia, no Jardim Tupã, em Barueri. Quer saber se tem hoje? É só perguntar pelo WhatsApp.</p>
-    <a class="botao botao--whats" href={loja.links.whatsCardapio} target="_blank" rel="noopener">Perguntar pelo WhatsApp</a>
+    <p>Padaria, salgados, bolos da Renata, hortifrúti, bebidas e tudo da mercearia, no Jardim Tupã, em Barueri. Quer saber se tem hoje? É só perguntar no Instagram.</p>
+    <a class="botao botao--whats" href={loja.links.instagram} target="_blank" rel="noopener">Perguntar no Instagram</a>
   </div>
 </header>
 
@@ -44,7 +44,7 @@ const totalRevisar = grupos.reduce((n, g) => n + g.itens.filter((i) => i.status 
   <div class="busca">
     <label for="busca">Procurar no cardápio</label>
     <input id="busca" type="search" placeholder="Ex.: bolo, pão, alho" autocomplete="off" data-busca-campo>
-    <p class="busca__vazio" data-busca-vazio hidden>Nada com esse nome no cardápio. Pergunte pelo WhatsApp: pode ser que tenha na loja.</p>
+    <p class="busca__vazio" data-busca-vazio hidden>Nada com esse nome no cardápio. Pergunte no Instagram: pode ser que tenha na loja.</p>
   </div>
 
   {grupos.map((g) => (
@@ -63,12 +63,12 @@ const totalRevisar = grupos.reduce((n, g) => n + g.itens.filter((i) => i.status 
         {g.itens.map((item) => <ItemCardapio item={item} mostrarStatus={revisao} />)}
       </ul>
       {g.id === 'bolos' && (
-        <a class="botao botao--etiqueta grupo__encomenda" href={loja.links.whatsBolo} target="_blank" rel="noopener">Encomendar bolo para festa</a>
+        <a class="botao botao--etiqueta grupo__encomenda" href={loja.links.instagram} target="_blank" rel="noopener">Encomendar bolo para festa</a>
       )}
     </section>
   ))}
 
-  <p class="rodape-cardapio">A disponibilidade muda ao longo do dia e da semana. Na dúvida, pergunte pelo WhatsApp antes de sair de casa. As fotos marcadas como ilustrativas são de banco de imagem e vão ser trocadas pelas da loja.</p>
+  <p class="rodape-cardapio">A disponibilidade muda ao longo do dia e da semana. Na dúvida, pergunte no Instagram antes de sair de casa. As fotos marcadas como ilustrativas são de banco de imagem e vão ser trocadas pelas da loja.</p>
 </div>
 
 <script>

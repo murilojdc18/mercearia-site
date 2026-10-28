@@ -1,10 +1,5 @@
 // Dados da loja num lugar só: todas as páginas leem daqui.
-// Devem bater com o Perfil da Empresa no Google (mesmo nome, endereço e telefone).
-
-const telefone = '5511972080503';
-
-export const whats = (mensagem: string) =>
-  `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+// Devem bater com o Perfil da Empresa no Google (mesmo nome e endereço).
 
 const enderecoBusca = 'Mercearia Guimarães Rosa, Rua Guimarães Rosa 465, Barueri SP';
 
@@ -33,8 +28,6 @@ export const placeId = 'ChIJX39YOZQBz5QRR5PTxbwf4Fc';
 
 export const loja = {
   nome: 'Mercearia Guimarães Rosa',
-  telefoneExibicao: '(11) 97208-0503',
-  telefoneSchema: '+55-11-97208-0503',
   endereco: {
     rua: 'Rua Guimarães Rosa, 465',
     bairro: 'Jardim Tupã',
@@ -51,10 +44,6 @@ export const loja = {
   ],
   pagamentos: ['Pix', 'dinheiro', 'cartão de débito', 'cartão de crédito'],
   links: {
-    whats: whats('Olá! Vim pelo site da Mercearia Guimarães Rosa.'),
-    whatsInstagram: whats('Olá! Vim pelo Instagram da Mercearia Guimarães Rosa.'),
-    whatsBolo: whats('Olá! Queria encomendar um bolo.'),
-    whatsCardapio: whats('Olá! Vi o cardápio e queria saber se tem: '),
     // Identificador da loja no Google, lido do próprio Perfil da Empresa.
     // Com ele, rota e mapa caem no pino certo em vez de numa busca por endereço,
     // que já trouxe lojas de nome parecido em outras cidades.

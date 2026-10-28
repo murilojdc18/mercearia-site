@@ -17,7 +17,6 @@ export function schemaLoja(site: URL) {
     url,
     image: absoluta('/og.jpg', site),
     logo: absoluta('/favicon.svg', site),
-    telephone: loja.telefoneSchema,
     address: {
       '@type': 'PostalAddress',
       streetAddress: loja.endereco.rua,
